@@ -1,0 +1,5 @@
+{
+  "name": "Calculadora de Comisiones",
+  "description": "Una aplicación para calcular las comisiones de venta, costos de financiamiento (CFT) e IVA, mostrando el monto final a acreditar. Simplifica el proceso de cálculo para diferentes canales de venta y opciones de cuotas.",
+  "requestFramePermissions": []
+}

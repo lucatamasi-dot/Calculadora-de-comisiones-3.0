@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-g" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Comisiones</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom scrollbar for better aesthetics */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+    /* Simple input focus animation */
+    @keyframes input-focus {
+      from {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+      }
+      to {
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0);
+      }
+    }
+    input:focus {
+      animation: input-focus 0.5s ease;
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0"
+  }
+}
+</script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
