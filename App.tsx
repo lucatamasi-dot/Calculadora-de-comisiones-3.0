@@ -276,9 +276,8 @@ export default function App() {
             </div>
         </div>
         <footer className="text-center mt-6 text-sm text-slate-500">
-          <p>Gracias por usar la Calculadora 3.0.</p>
-          <p>Ante cualquier inconveniente o falla, no duden en reportarlo.</p>
-          <p>Creado por Luca Tamasi.</p>
+          <p>Gracias por usar la Calculadora 3.0. 💪</p>
+          <p>By Luca Tamasi.</p>
         </footer>
       </main>
     </div>

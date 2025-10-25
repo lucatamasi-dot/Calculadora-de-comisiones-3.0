@@ -1,8 +1,8 @@
 
 export type CantidadCuotas = 1 | 2 | 3 | 6 | 9 | 12;
 
-export const CANALES_DE_VENTA_NORMAL = ['Link de pago', 'POS pro', 'POS mini', 'tienda nube', 'API', 'otras'] as const;
-export const CANAL_EMPRETIENDA = 'empretienda' as const;
+export const CANALES_DE_VENTA_NORMAL = ['Link de pago', 'POS pro', 'POS mini', 'Tienda nube', 'API', 'Otras'] as const;
+export const CANAL_EMPRETIENDA = 'Empretienda' as const;
 export const CANAL_QR = 'QR' as const;
 
 export type CanalDeVentaNormal = typeof CANALES_DE_VENTA_NORMAL[number];
