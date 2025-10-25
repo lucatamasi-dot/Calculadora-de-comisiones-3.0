@@ -42,7 +42,7 @@ export default function App() {
   const [step, setStep] = useState(1);
   const [monto, setMonto] = useState('');
   const [cuotas, setCuotas] = useState<CantidadCuotas>(1);
-  const [canal, setCanal] = useState<CanalDeVenta>('link de pago');
+  const [canal, setCanal] = useState<CanalDeVenta>('Link de pago');
   const [resultado, setResultado] = useState<ResultadoCalculo | null>(null);
   const [error, setError] = useState('');
   const [qrCorrectionMessage, setQrCorrectionMessage] = useState<string | null>(null);
@@ -113,7 +113,7 @@ export default function App() {
     setStep(1);
     setMonto('');
     setCuotas(1);
-    setCanal('link de pago');
+    setCanal('Link de pago');
     setResultado(null);
     setError('');
     setQrCorrectionMessage(null);
@@ -130,7 +130,7 @@ export default function App() {
         return (
             <form onSubmit={handleMontoSubmit}>
                 <h2 className="text-xl font-semibold text-slate-700 mb-2">Paso 1: Monto de la venta</h2>
-                <p className="text-slate-500 mb-6">Ingresá el valor total de la operación.</p>
+                <p className="text-slate-500 mb-6">Ingresá el monto bruto de la operación.</p>
                 <div className="relative">
                     <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">$</span>
                     <input
@@ -276,8 +276,9 @@ export default function App() {
             </div>
         </div>
         <footer className="text-center mt-6 text-sm text-slate-500">
-          <p>Gracias por usar la Calculadora 2.0.</p>
+          <p>Gracias por usar la Calculadora 3.0.</p>
           <p>Ante cualquier inconveniente o falla, no duden en reportarlo.</p>
+          <p>Creado por Luca Tamasi.</p>
         </footer>
       </main>
     </div>
