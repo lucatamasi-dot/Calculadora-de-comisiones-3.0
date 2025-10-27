@@ -1,9 +1,8 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
-import type { CantidadCuotas, CanalDeVenta, ResultadoCalculo, CanalDeVentaNormal } from './types';
-// FIX: `CUOTAS_OPTIONS` is exported from `constants.ts`, not `types.ts`. The import has been moved.
+import type { CantidadCuotas, CanalDeVenta, ResultadoCalculo, CanalDeVentaNormal, PaymentMethod } from './types';
 import { CANAL_EMPRETIENDA, CANAL_QR, CANALES_DE_VENTA_NORMAL } from './types';
-import { IVA_RATE, COMISION_NORMAL, COMISION_EMPRETIENDA, COMISION_QR, CFTS, CUOTAS_OPTIONS } from './constants';
+import { IVA_RATE, COMISION_NORMAL, COMISION_EMPRETIENDA, COMISION_QR, CFTS, CUOTAS_OPTIONS, COMISION_DEBITO } from './constants';
 
 // --- Helper Functions ---
 const formatCurrency = (value: number) => {
@@ -43,6 +42,7 @@ export default function App() {
   const [monto, setMonto] = useState('');
   const [cuotas, setCuotas] = useState<CantidadCuotas>(1);
   const [canal, setCanal] = useState<CanalDeVenta>('Link de pago');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('credito');
   const [resultado, setResultado] = useState<ResultadoCalculo | null>(null);
   const [error, setError] = useState('');
   const [qrCorrectionMessage, setQrCorrectionMessage] = useState<string | null>(null);
@@ -71,10 +71,14 @@ export default function App() {
     
     let comisionPct: number;
     if (CANALES_DE_VENTA_NORMAL.includes(canal as CanalDeVentaNormal)) {
-        comisionPct = COMISION_NORMAL;
+        if (cuotas === 1 && (canal === 'POS pro' || canal === 'POS mini') && paymentMethod === 'debito') {
+            comisionPct = COMISION_DEBITO;
+        } else {
+            comisionPct = COMISION_NORMAL;
+        }
     } else if (canal === CANAL_EMPRETIENDA) {
         comisionPct = COMISION_EMPRETIENDA;
-    } else {
+    } else { // CANAL_QR
         comisionPct = COMISION_QR;
     }
 
@@ -106,22 +110,24 @@ export default function App() {
       montoTotalAAcreditar,
       aplicaCft,
     });
-    setStep(4);
-  }, [monto, cuotas, canal]);
+    setStep(5);
+  }, [monto, cuotas, canal, paymentMethod]);
 
   const handleReset = () => {
     setStep(1);
     setMonto('');
     setCuotas(1);
     setCanal('Link de pago');
+    setPaymentMethod('credito');
     setResultado(null);
     setError('');
     setQrCorrectionMessage(null);
   };
   
   const progress = useMemo(() => {
-    if (step === 4) return 100;
-    return ((step - 1) / 3) * 100;
+    if (step >= 5) return 100;
+    const totalSteps = 4;
+    return ((step - 1) / totalSteps) * 100;
   }, [step]);
   
   const renderStep = () => {
@@ -172,6 +178,7 @@ export default function App() {
         );
       case 3:
         const canales = [...CANALES_DE_VENTA_NORMAL, CANAL_EMPRETIENDA, CANAL_QR];
+        const shouldShowPaymentMethodStep = cuotas === 1 && (canal === 'POS pro' || canal === 'POS mini');
         return (
             <div>
                 <h2 className="text-xl font-semibold text-slate-700 mb-2">Paso 3: Canal de venta</h2>
@@ -188,13 +195,42 @@ export default function App() {
                     <button onClick={() => setStep(2)} className="w-1/2 bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded-lg hover:bg-slate-300 flex items-center justify-center transition-transform transform hover:scale-105">
                         <ArrowLeftIcon/> Atrás
                     </button>
+                    {shouldShowPaymentMethodStep ? (
+                        <button onClick={() => setStep(4)} className="w-1/2 bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 flex items-center justify-center transition-transform transform hover:scale-105">
+                            Siguiente <ArrowRightIcon/>
+                        </button>
+                    ) : (
+                        <button onClick={handleCalculate} className="w-1/2 bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 flex items-center justify-center transition-transform transform hover:scale-105">
+                            <CheckCircleIcon/> Calcular
+                        </button>
+                    )}
+                </div>
+            </div>
+        );
+      case 4:
+        return (
+            <div>
+                <h2 className="text-xl font-semibold text-slate-700 mb-2">Paso 4: Tipo de tarjeta</h2>
+                <p className="text-slate-500 mb-6">Seleccioná si el pago fue con crédito o débito.</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button onClick={() => setPaymentMethod('credito')} className={`p-4 rounded-lg border-2 transition text-center font-semibold ${paymentMethod === 'credito' ? 'bg-blue-600 text-white border-blue-600 ring-2 ring-blue-300' : 'bg-white hover:border-blue-500 border-slate-300'}`}>
+                        Tarjeta de Crédito
+                    </button>
+                    <button onClick={() => setPaymentMethod('debito')} className={`p-4 rounded-lg border-2 transition text-center font-semibold ${paymentMethod === 'debito' ? 'bg-blue-600 text-white border-blue-600 ring-2 ring-blue-300' : 'bg-white hover:border-blue-500 border-slate-300'}`}>
+                        Tarjeta de Débito
+                    </button>
+                </div>
+                <div className="flex justify-between mt-6 space-x-4">
+                    <button onClick={() => setStep(3)} className="w-1/2 bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded-lg hover:bg-slate-300 flex items-center justify-center transition-transform transform hover:scale-105">
+                        <ArrowLeftIcon/> Atrás
+                    </button>
                     <button onClick={handleCalculate} className="w-1/2 bg-green-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-green-700 flex items-center justify-center transition-transform transform hover:scale-105">
                         <CheckCircleIcon/> Calcular
                     </button>
                 </div>
             </div>
         );
-      case 4:
+      case 5:
         if (!resultado) return null;
         return (
             <div>
@@ -263,7 +299,7 @@ export default function App() {
                 <h1>Calculadora de Comisiones</h1>
             </header>
             
-            {step < 4 && (
+            {step < 5 && (
               <div className="mb-6">
                 <div className="w-full bg-slate-200 rounded-full h-2.5">
                   <div className="bg-blue-600 h-2.5 rounded-full transition-all duration-500" style={{ width: `${progress}%` }}></div>

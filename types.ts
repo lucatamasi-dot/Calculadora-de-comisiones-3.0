@@ -7,6 +7,7 @@ export const CANAL_QR = 'QR' as const;
 
 export type CanalDeVentaNormal = typeof CANALES_DE_VENTA_NORMAL[number];
 export type CanalDeVenta = CanalDeVentaNormal | typeof CANAL_EMPRETIENDA | typeof CANAL_QR;
+export type PaymentMethod = 'credito' | 'debito';
 
 export interface ResultadoCalculo {
   montoOriginal: number;

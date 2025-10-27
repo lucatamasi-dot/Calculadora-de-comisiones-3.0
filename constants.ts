@@ -4,6 +4,7 @@ import type { CantidadCuotas } from './types';
 export const IVA_RATE = 0.21;
 
 export const COMISION_NORMAL = 0.049;
+export const COMISION_DEBITO = 0.029;
 export const COMISION_EMPRETIENDA = 0.044;
 export const COMISION_QR = 0.008;
 
